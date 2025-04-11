@@ -1,5 +1,0 @@
-digraph {
-	0 [label=sqrt]
-	1 [label=x]
-	0 -> 1
-}

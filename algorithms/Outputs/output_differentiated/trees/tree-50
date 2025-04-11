@@ -1,5 +1,0 @@
-digraph {
-	0 [label=sin]
-	1 [label=6.797]
-	0 -> 1
-}
