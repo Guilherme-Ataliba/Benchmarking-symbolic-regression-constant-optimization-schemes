@@ -77,9 +77,44 @@ The benchmark was performed across 10 univariate symbolic regression problems, r
 Each optimization method was tested under the same conditions to ensure fair comparison. More than 200,000 evaluations were conducted.
 
 ## 📈 Results & Analysis
-I highly recommend to read the paper to better understand the nuances and conclusions therein. Nonetheless, here are some analysis and conclusions obtained in the study:
 
-### 
+For a comprehensive understanding of the methodology and key findings, we strongly encourage reading the full [paper](https://arxiv.org/abs/2412.02126). However, some of the core analyses and insights are summarized below to showcase the evaluation process and the behavior of each optimization scheme.
+
+These results highlight not only technical performance, but also reflect skills in experimental design, statistical validation, and metric interpretation—all critical for developing reliable ML systems.
+
+---
+
+### 📉 MSE Distribution
+To ensure statistical reliability, each constant optimization strategy was executed dozens of times per test function, until convergence in the result distribution was observed. The plot below shows the **boxplot of MSE values** for each method across all benchmark problems, providing a clear picture of both central tendency and variance.
+
+<div align="center">
+  <img src="figures/MSE_boxplot.jpg" alt="MSE Distribution Boxplot" width="500"/>
+</div>
+
+This analysis demonstrates:
+- The **consistency** and **robustness** of certain optimizers (e.g., BFGS, PSO)  
+- How some methods present wider variance, suggesting less reliable convergence  
+- A well-structured benchmarking pipeline, able to handle high-throughput experimentation
+
+---
+
+### 🔥 R² Cumulative Heatmap - 2-fold Metric Analysis
+
+To explore the relationship between symbolic and numerical performance, we analyzed how often each model achieved a high **R² score**, a standard measure of explained variance. This heatmap shows the **cumulative success rate** of each optimizer as the threshold increases.
+
+<div align="center">
+  <img src="figures/Threshold_Heatmap_R2.jpg" alt="R2 Threshold Heatmap" width="500"/>
+</div>
+
+Highlights:
+- Evaluating **R² alongside TED** allows a richer, multi-dimensional understanding of model quality  
+- Some optimizers, while numerically strong, fail to produce interpretable or symbolic matches  
+- This kind of dual-metric insight is valuable when designing systems that must be both accurate and explainable  
+
+---
+
+These analyses underscore an important lesson in machine learning: strong numerical results do not guarantee meaningful or interpretable models. The framework built for this benchmark reflects a deliberate focus on **evaluating trade-offs**, **validating assumptions**, and **communicating results with clarity**—skills crucial for real-world data science roles.
+
   
 ## 📚 Citation
 If you use this repository in your work, please cite:
@@ -98,5 +133,5 @@ If you use this repository in your work, please cite:
 
 ## 👨‍💻 Author
 
-Developed by Luiz Guilherme Ataliba dos Reis,
-Master’s student in Computational Physics, with a focus on machine learning, symbolic regression, and high-performance computing.
+Developed by Luiz Guilherme Ataliba dos Reis, Master’s student in Computational Physics, with a focus on machine learning, symbolic regression, and high-performance computing.
+For more, visit [LinkedIn](www.linkedin.com/in/guilherme-ataliba) or follow updates
