@@ -119,6 +119,7 @@ These analyses underscore an important lesson in machine learning: strong numeri
 ## 📚 Citation
 If you use this repository in your work, please cite:
 
+```
 @misc{reis2024benchmarking,
   title={Benchmarking Symbolic Regression Constant Optimization Schemes},
   author={L.G.A. dos Reis and V.L.P.S. Caminha and T.J.P. Penna},
@@ -127,6 +128,7 @@ If you use this repository in your work, please cite:
   archivePrefix={arXiv},
   primaryClass={cs.LG}
 }
+```
 
 ## 🔗 Related Projects
 - [CSOWP-SR](https://github.com/Guilherme-Ataliba/CSOWP-Symbolic-Regression): Constant Swarm with Operator Weighted Pruning – The symbolic regression engine used in this benchmark.
