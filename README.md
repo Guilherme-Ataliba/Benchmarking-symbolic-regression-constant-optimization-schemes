@@ -1,19 +1,102 @@
-# CSOWP SR - Constant Swarm  with Operator Weighted Pruning
+# Benchmarking Symbolic Regression Constant Optimization Schemes
 
-This repository implements a symbolic regression model inspired by the article [Korns - 2013 - A Baseline Symbolic Regression Algorithm.pdf](https://github.com/user-attachments/files/17723430/Korns.-.2013.-.A.Baseline.Symbolic.Regression.Algorithm.pdf) and with many improvements by the author. 
+This is the follow-up repository which has been used to write the paper **"Benchmarking Symbolic Regression Constant Optimization Schemes"**, currently on Arxiv, autored by me (L.G.A Reis) and V.L.P.S. Caminha and T.J.P.Penna. 
 
-Symbolic regression is a machine learning technique that aims to discover mathematical expressions that best describe the relationship within a given dataset. Unlike traditional regression, which fits data to a specific model, symbolic regression searches for the model itself, finding both the structure and the parameters of equations. This approach often employs genetic programming, an evolutionary algorithm that generates and evolves mathematical expressions through operations inspired by natural selection. Symbolic regression is particularly useful for finding interpretable, compact, and potentially novel formulas to explain complex data. Applications range from physics to health care and economics (specially stock market).
+This repository implements a series of analysis regarding a benchmark done to evaluate the impact different constant optimization techniques have on the accuracy of molling power of Symbolic Regression models. 
 
-Evolutionary search process to find the best expression fit.
-![SR_gif](https://github.com/user-attachments/assets/ef794ca7-295c-448b-ae7e-4ef17909e892)
 
-Even though the purpose of this work is not to compete with state-of-the-art models, it produced interesing results that led to the developement of a scientific paper. Such study promotes a benchmark of different constant optimization algorithms in the context of symbolic regression's evolutionary algorithms. 
+## 🧠 About the Project
+Symbolic regression (SR) is a machine learning technique that aims to discover symbolic mathematical expressions from data and the field has seen many developemnts a new models in recent times. 
 
-## Seminar
-One of the early steps for applications of this method was to simulate simple physical systems. The research lead to a seminary presentation that presented the model for simple problems such as the:
+A crucial aspect of SR often overlooked in benchmarking and model development is **constant optimization**—the process of refining the numeric coefficients within symbolic expressions during the search process. This project provides a comprehensive evaluation of **eight different optimization algorithms**, including:
+- BFGS  
+- Conjugate Gradient (CG)  
+- Levenberg–Marquardt (LS)  
+- Nelder-Mead  
+- Particle Swarm Optimization (PSO)  
+- Differential Evolution (DE)  
+- Dual Annealing  
+- A no-optimization baseline (NoOpt)
+All of them were used following scipy's implementation, in order to guarantee a more even field. The only exception to this rule is PSO (which has no scipy implementaion), but further discussion is promoted in the article. 
 
-#### Projectile Motion
-![oblique_projectile](https://github.com/user-attachments/assets/fac24d8b-d238-429f-bfc4-4f95c5ad1511)
+> We measure both numerical accuracy (MSE, R²) and symbolic accuracy (TED), plus expression complexity. On the later, we have also improved on the use of **Tree Edit Distance (TED)** as a symbolic accuracy metric, allowing deeper insight into how closely a discovered expression matches the true solution and they are distributed in this space.
 
-#### Damped Pendulum
-![damped_pendulum](https://github.com/user-attachments/assets/263b0127-8515-4d24-98d2-83acafce3234)
+## 📦 Codebase Overview
+
+This repository contains the benchmarking framework used in the experiments. It builds upon the [CSOWP-SR repository](https://github.com/Guilherme-Ataliba/CSOWP-SR), which provides the core symbolic regression model used as the testing ground for this study.
+
+> The choice to use a custom-built, minimal symbolic regression engine ensures that results reflect the effects of constant optimization alone—without interference from complex heuristics found in state-of-the-art SR libraries. So the analysis here developed should generalize to any GPSR model.
+
+```bash
+📂 /benchmarking
+├── /algorithms/          # Contains the Symbolic Regression model utilized -  CSOWP-SR
+├── /datasets/            # This is where all post-processed data is stored. The raw data is not contained is this repository due to its size.
+├── /figures/             # All figures that ended up in the paper and some that didn't make the cut.
+└── README.md
+``` 
+
+## 📊 Metrics Used
+To evaluate the models, we combine both numerical and symbolic metrics:
+- MSE (Mean Squared Error) – measures numerical accuracy
+- R² (Coefficient of Determination) – standard regression quality measure
+- TED (Tree Edit Distance) – evaluates symbolic closeness of expressions
+- Expression Size – complexity measured by the number of nodes in the expression tree
+
+## Recursive Simplify
+We have developed a custom preprocessing pipeline that ensures consistency in expression comparison, reducing them to a common form, using symbolic simplification and constant abstraction. The absence of a trustworthy simplification algorithm has been discussed in many papers as a potential problem when studying symbolic regression accuracy. Following we show an illustration of the simplification routine, followed by the Python code (that uses sympy). 
+- For more detail, one can check its implementation under [preprocessing.py](preprocessing.py) and further discussion on the actual paper.
+
+<div align="center">
+  <img src="figures/expression_simplification_diagram.png" alt="Symbolic Regression Evolution" width="500"/>
+</div>
+
+```python
+def recursive_simplify (expr, precision =15) :
+  # If the expr has no args, it is an atom (number or symbol)
+  if not expr.args :
+    return expr.evalf(precision).simplify()
+
+  # Recursively process all arguments
+  simplified_args = [recursive_simplify(arg, precision) for arg in expr.args]
+
+  # Reconstruct expression with simplified arguments
+  simplified_expr = expr.func(*simplified_args)
+
+  # Remove and Simplify constants
+  return simplified_expr.evalf(precision).simplify()
+```
+
+
+## 🧪 Benchmarking Setup
+The benchmark was performed across 10 univariate symbolic regression problems, ranging from easy to hard, with and without specific prior knowledge (basis function restriction). Examples include:
+- Logistic Growth
+- Radioactive Decay
+- Damped Pendulum
+- Complex benchmark functions from the Korns dataset
+
+Each optimization method was tested under the same conditions to ensure fair comparison. More than 200,000 evaluations were conducted.
+
+## 📈 Results & Analysis
+I highly recommend to read the paper to better understand the nuances and conclusions therein. Nonetheless, here are some analysis and conclusions obtained in the study:
+
+### 
+  
+## 📚 Citation
+If you use this repository in your work, please cite:
+
+@misc{reis2024benchmarking,
+  title={Benchmarking Symbolic Regression Constant Optimization Schemes},
+  author={L.G.A. dos Reis and V.L.P.S. Caminha and T.J.P. Penna},
+  year={2024},
+  eprint={2412.02126},
+  archivePrefix={arXiv},
+  primaryClass={cs.LG}
+}
+
+## 🔗 Related Projects
+- [CSOWP-SR](https://github.com/Guilherme-Ataliba/CSOWP-Symbolic-Regression): Constant Swarm with Operator Weighted Pruning – The symbolic regression engine used in this benchmark.
+
+## 👨‍💻 Author
+
+Developed by Luiz Guilherme Ataliba dos Reis,
+Master’s student in Computational Physics, with a focus on machine learning, symbolic regression, and high-performance computing.
