@@ -136,4 +136,4 @@ If you use this repository in your work, please cite:
 ## 👨‍💻 Author
 
 Developed by Luiz Guilherme Ataliba dos Reis, Master’s student in Computational Physics, with a focus on machine learning, symbolic regression, and high-performance computing.
-For more, visit [LinkedIn](www.linkedin.com/in/guilherme-ataliba) or follow updates
+For more, visit [LinkedIn](https://www.linkedin.com/in/guilherme-ataliba/) or follow updates
